@@ -10,49 +10,7 @@ Aplicación MVP para entrevistas de **screening técnico + soft skills** para **
   - tamaño de equipo y logros
 - Genera un reporte de screening con habilidades detectadas y recomendación.
 
-## Ejecutar (Linux / macOS)
-```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .[dev]
-python -m uvicorn app.main:app --reload --port 8000
-```
 
-## Ejecutar (Windows CMD)
-```bat
-cd C:\ruta\a\Codex-Test
-scripts\start_windows.cmd
-```
-
-## Ejecutar (Windows PowerShell)
-```powershell
-cd C:\ruta\a\Codex-Test
-.\scripts\start_windows.ps1
-```
-
-Estos scripts:
-- crean el venv si no existe,
-- instalan dependencias,
-- levantan la app con el Python del venv (`.venv\Scripts\python.exe`).
-
-Abrir: `http://localhost:8000`
-
-## Scripts rápidos
-- Windows CMD: `scripts\start_windows.cmd`
-- PowerShell: `scripts\start_windows.ps1`
-- Linux/macOS: `bash scripts/start_unix.sh`
-
-## API principal
-- `POST /api/session`
-- `POST /api/session/{session_id}/message`
-- `GET /api/session/{session_id}/report`
-
-## Troubleshooting en Windows
-- Error **"source no se reconoce"**: estás en CMD/PowerShell; usa los scripts de `scripts\`.
-- Error **"uvicorn no se reconoce"**: no ejecutes `uvicorn` directo; usa `python -m uvicorn` o los scripts.
-- Error **"py no se reconoce"**: instala Python desde python.org o usa `python` si ya está en PATH.
-- Si PowerShell bloquea scripts: ejecuta una vez `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
-
-## Notas
-- Este MVP usa extracción heurística local (sin LLM externo).
-- Está listo para conectar un proveedor LLM en la clase `InterviewEngine`.
