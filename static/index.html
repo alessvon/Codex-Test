@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Screening Product Designer</title>
+    <style>
+      body { font-family: Inter, Arial, sans-serif; background: #f5f7fb; margin: 0; }
+      .container { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+      h1 { margin-top: 0; }
+      .row { display: flex; gap: .75rem; margin-bottom: 1rem; }
+      input, button, textarea { padding: .7rem; border-radius: 8px; border: 1px solid #d4d8e2; }
+      input { flex: 1; }
+      button { background: #1e40af; color: #fff; cursor: pointer; }
+      #chat { height: 350px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; background: #fafafa; }
+      .msg { margin-bottom: .75rem; }
+      .ai { color: #1e3a8a; }
+      .you { color: #0f766e; }
+      pre { white-space: pre-wrap; background: #0b1020; color: #d1e9ff; border-radius: 8px; padding: .75rem; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Agentic Screening · Product Designer</h1>
+      <p>Explora experiencia profesional y extrae habilidades, seniority y evidencia de impacto.</p>
+      <div class="row">
+        <input id="name" placeholder="Nombre del candidato" value="Candidato" />
+        <button onclick="startInterview()">Iniciar entrevista</button>
+        <button onclick="fetchReport()">Generar reporte</button>
+      </div>
+      <div id="chat"></div>
+      <div class="row" style="margin-top:1rem;">
+        <textarea id="message" placeholder="Escribe tu respuesta..." rows="3" style="flex:1"></textarea>
+        <button onclick="sendMessage()">Enviar</button>
+      </div>
+      <h3>Reporte</h3>
+      <pre id="report">Aún no generado.</pre>
+    </div>
+
+    <script>
+      let sessionId = null;
+
+      const chat = document.getElementById("chat");
+      function addMsg(role, text) {
+        const div = document.createElement("div");
+        div.className = `msg ${role}`;
+        div.innerHTML = `<strong>${role === "ai" ? "Entrevistador" : "Candidato"}:</strong> ${text}`;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      async function startInterview() {
+        const candidate_name = document.getElementById("name").value || "Candidato";
+        const res = await fetch("/api/session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ candidate_name, target_role: "Product Designer", language: "es" })
+        });
+        const data = await res.json();
+        sessionId = data.session_id;
+        chat.innerHTML = "";
+        addMsg("ai", data.message.reply);
+      }
+
+      async function sendMessage() {
+        if (!sessionId) return alert("Primero inicia una entrevista");
+        const message = document.getElementById("message").value;
+        if (!message.trim()) return;
+        addMsg("you", message);
+        document.getElementById("message").value = "";
+
+        const res = await fetch(`/api/session/${sessionId}/message`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        addMsg("ai", data.reply);
+      }
+
+      async function fetchReport() {
+        if (!sessionId) return alert("Primero inicia una entrevista");
+        const res = await fetch(`/api/session/${sessionId}/report`);
+        const data = await res.json();
+        document.getElementById("report").textContent = JSON.stringify(data, null, 2);
+      }
+    </script>
+  </body>
+</html>
