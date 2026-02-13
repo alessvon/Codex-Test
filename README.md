@@ -67,3 +67,22 @@ Si responde con `session_id`, la app está funcionando.
 ## Notas
 - Este MVP usa extracción heurística local (sin LLM externo).
 - Está listo para conectar un proveedor LLM en la clase `InterviewEngine`.
+
+
+## UI Agentic con AI SDK (Next.js)
+Esta UI vive en `ui/` y usa `@ai-sdk/react` para chat y una ruta `api/chat` que orquesta la entrevista contra el backend FastAPI.
+
+```bash
+# terminal 1 (backend)
+python -m uvicorn app.main:app --reload --port 8000
+
+# terminal 2 (ui)
+cd ui
+npm install
+npm run dev
+```
+
+Abrir: `http://localhost:3000`
+
+Variables opcionales:
+- `FASTAPI_URL` (default `http://127.0.0.1:8000`)

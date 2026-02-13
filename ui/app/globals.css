@@ -1,0 +1,13 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: #f5f7fb; color: #111827; }
+.container { max-width: 980px; margin: 2rem auto; background: #fff; border-radius: 12px; padding: 1.25rem; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.row { display: flex; gap: .75rem; }
+input, button, textarea { padding: .7rem; border-radius: 8px; border: 1px solid #d4d8e2; }
+button { background: #1e40af; color: #fff; cursor: pointer; }
+.chat { min-height: 360px; max-height: 460px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; background: #fafafa; margin: 1rem 0; }
+.msg { margin-bottom: .75rem; }
+.msg strong { display: inline-block; margin-right: .35rem; }
+.user strong { color: #0f766e; }
+.assistant strong { color: #1e3a8a; }
+.tool-card { border: 1px solid #dbeafe; background: #eff6ff; padding: .7rem; border-radius: 8px; margin: .5rem 0; }
+.small { color: #4b5563; font-size: .9rem; }
